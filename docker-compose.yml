@@ -2,17 +2,19 @@ version: "3.8"
 
 services:
   meu-fastapi: # nome do serviço (pode mudar)
-    build: .
-    container_name: meu-fastapi
-    restart: unless-stopped
+    image: ghcr.io/matheusdea/rev-fastapi:latest # imagem do GitHub
     networks:
       - portainer
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.meu-fastapi.rule=Host(`fastapi.revenuelab.com.br`)"
-      - "traefik.http.routers.meu-fastapi.entrypoints=websecure"
-      - "traefik.http.routers.meu-fastapi.tls.certresolver=letsencryptresolver"
-      - "traefik.http.services.meu-fastapi.loadbalancer.server.port=8000"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.meu-fastapi.rule=Host(`fastapi.revenuelab.com.br`)"
+        - "traefik.http.routers.meu-fastapi.entrypoints=websecure"
+        - "traefik.http.routers.meu-fastapi.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.meu-fastapi.loadbalancer.server.port=8000"
 
 networks:
   portainer:

@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  meu-fastapi: # nome do serviço (pode mudar)
+    image: matheusdea/rev-fastapi:latest # ou build: .
+    build: .
+    container_name: meu-fastapi
+    restart: unless-stopped
+    networks:
+      - portainer
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.meu-fastapi.rule=Host(`fastapi.revenuelab.com.br`)"
+      - "traefik.http.routers.meu-fastapi.entrypoints=websecure"
+      - "traefik.http.routers.meu-fastapi.tls.certresolver=letsencryptresolver"
+      - "traefik.http.services.meu-fastapi.loadbalancer.server.port=8000"
+
+networks:
+  portainer:
+    external: true

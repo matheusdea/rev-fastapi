@@ -2,7 +2,6 @@ version: "3.8"
 
 services:
   meu-fastapi: # nome do serviço (pode mudar)
-    image: matheusdea/rev-fastapi:latest # ou build: .
     build: .
     container_name: meu-fastapi
     restart: unless-stopped

@@ -13,8 +13,9 @@ class VideoProcessRequest(BaseModel):
     token_crm: str
     nome_arquivo: str = "video_fireflies.mp4"
     contato_id: int
+    oportunidade_id: int
 
-def executar_processamento_completo(url_video, nome_arquivo, token_crm, contato_id):
+def executar_processamento_completo(url_video, nome_arquivo, token_crm, contato_id, oportunidade_id):
     """
     Mantive sua lógica original, mas adicionei um ID único ao nome do arquivo
     para evitar conflitos se dois processos rodarem ao mesmo tempo.
@@ -33,6 +34,7 @@ def executar_processamento_completo(url_video, nome_arquivo, token_crm, contato_
         url_crm = "http://app.nectarcrm.com.br/crm/api/1/publicacao/incluirComAnexos"
         payload_dados = {
             "contato": {"id": contato_id},
+            "oportunidade": {"id": oportunidade_id},
             "assunto": "Vídeo da Reunião - Fireflies",
             "descricao": "Publicação automática via API."
         }
@@ -71,7 +73,8 @@ def processar(dados: VideoProcessRequest, background_tasks: BackgroundTasks):
         dados.url_video, 
         dados.nome_arquivo, 
         dados.token_crm,
-        dados.contato_id
+        dados.contato_id,
+        dados.oportunidade_id
     )
     
     return {"status": "processamento_iniciado", "mensagem": "O vídeo está sendo baixado e enviado ao CRM em segundo plano."}
